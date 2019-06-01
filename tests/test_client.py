@@ -99,3 +99,22 @@ class TestExtension:
         with patch('requests.get') as m:
             m.return_value.status_code = 200
             m.return_value.json.return_value = {'aapl': {'test'}}
+
+    def test_watchlists(self):
+        from tdameritrade import TDClient
+
+        tdc = TDClient('test')
+
+        with patch('requests.get') as m:
+            m.return_value.status_code = 200
+            m.return_value.json.return_value = {"accountId": "1",
+                                                "name": "Indexes",
+                                                "watchlistId": "2",
+                                                "watchlistItems": []}
+            tdc.watchlists()
+            tdc.watchlists(1)
+            tdc.watchlists(1, 2)
+
+
+
+

@@ -1,12 +1,13 @@
 import os
 import requests
 import pandas as pd
-from .urls import ACCOUNTS, INSTRUMENTS, QUOTES, SEARCH, HISTORY, OPTIONCHAIN, MOVERS
+from .urls import ACCOUNTS, INSTRUMENTS, QUOTES, SEARCH, HISTORY, OPTIONCHAIN, MOVERS, WATCHLISTS
 
 
 class TDClient(object):
     def __init__(self, access_token=None, accountIds=None):
         self._token = access_token or os.environ['ACCESS_TOKEN']
+        self.accountId = None
         self.accountIds = accountIds or []
 
     def _headers(self):
@@ -103,3 +104,9 @@ class TDClient(object):
                             headers=self._headers(),
                             params={'direction': direction,
                                     'change_type': change_type})
+
+    def watchlists(self, accountId=None, watchlistId=None):
+        accId = accountId if accountId else ''
+        wlId = watchlistId if watchlistId else ''
+        return requests.get(WATCHLISTS % (accId, wlId),
+                            headers=self._headers()).json()
