@@ -107,6 +107,10 @@ class TDClient(object):
 
     def watchlists(self, accountId=None, watchlistId=None):
         accId = accountId if accountId else ''
-        wlId = watchlistId if watchlistId else ''
+        wlId = '/' + watchlistId if watchlistId else ''
+        print(WATCHLISTS % (accId, wlId))
         return requests.get(WATCHLISTS % (accId, wlId),
                             headers=self._headers()).json()
+
+    def watchlistsDF(self, accountId=None, watchlistId=None):
+        return pd.io.json.json_normalize(self.watchlists(accountId, watchlistId))
