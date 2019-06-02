@@ -16,9 +16,9 @@ from .urls import (
 
 class TDClient(object):
     def __init__(self, refresh_token=None, accountIds=None, clientId=None):
-        self._access_token = os.environ["ACCESS_TOKEN"]
-        self._refresh_token = refresh_token or os.environ["REFRESH_TOKEN"]
-        self._client_id = clientId or os.environ["CLIENT_ID"]
+        self._access_token = os.getenv("ACCESS_TOKEN", "")
+        self._refresh_token = refresh_token or os.getenv("REFRESH_TOKEN", "")
+        self._client_id = clientId or os.getenv("CLIENT_ID", "")
         self.accountIds = accountIds or []
 
     def _headers(self):
@@ -133,8 +133,8 @@ class TDClient(object):
         )
 
     def watchlists(self, accountId=None, watchlistId=None):
-        accId = accountId if accountId else ""
-        wlId = "/" + watchlistId if watchlistId else ""
+        accId = str(accountId) if accountId else ""
+        wlId = "/" + str(watchlistId) if watchlistId else ""
         response = self.get(WATCHLISTS % (accId, wlId))
         return response.json()
 
